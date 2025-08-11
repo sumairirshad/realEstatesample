@@ -46,13 +46,13 @@ namespace RealStateAPI.Controllers
         }
 
         [HttpPost("fetchProperties")]
-        public async Task<IActionResult> FetchProperties(int userId)
+        public async Task<IActionResult> FetchProperties([FromBody] UserIdDTO data)
         {
             var response = new APIResponse();
 
             try
             {
-                var result = await _iProperties.FetchProperties(userId);
+                var result = await _iProperties.FetchProperties(data.userId);
 
                 response.Result = result;
                 response.IsSuccess = true;
@@ -95,13 +95,13 @@ namespace RealStateAPI.Controllers
         }
 
         [HttpPost("fetchIsPropertyFavourited")]
-        public async Task<IActionResult> CheckIsFavourited(int userId)
+        public async Task<IActionResult> CheckIsFavourited([FromBody] UserIdDTO data)
         {
             var response = new APIResponse();
 
             try
             {
-                var result = await _iFav.FetchFavouritedProperties(userId);
+                var result = await _iFav.FetchFavouritedProperties(data.userId);
 
                 response.Result = result;
                 response.IsSuccess = true;
