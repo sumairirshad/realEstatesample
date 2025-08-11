@@ -6,6 +6,6 @@ namespace RealStateAPI.Repositories.Interface
     public interface IFavourites
     {
         Task<(Favourites?, bool)> SaveFavourit(FavouritesDTO dto);
-        Task<IList<Favourites>> FetchFavouritedProperties(int userId);
+        Task<IList<dynamic>> FetchFavouritedProperties(int userId);
     }
 }
