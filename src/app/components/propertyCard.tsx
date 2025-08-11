@@ -7,6 +7,7 @@ import { ArrowUpRight } from "lucide-react";
 import toast from "react-hot-toast";
 import { useUser } from "../context/userContext";
 import { saveFavourites } from "../Services/BaseAPI";
+import { useRouter } from "next/navigation";
 
 type Props = {
   id:number;
@@ -19,6 +20,7 @@ type Props = {
   imageUrl: string;
   listingType: "rent" | "sell";
   isFavourite?: boolean;
+  descritption:string;
 };
 
 export default function PropertyCard({
@@ -31,15 +33,13 @@ export default function PropertyCard({
   carspots,
   imageUrl,
   listingType,
-  isFavourite
+  isFavourite,
+  descritption
 }: Props) {
   const [liked, setLiked] = useState<boolean>(!!isFavourite);
   const {userId, email} = useUser();
   const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    alert(isFavourite);
-  }, []);
+  const router = useRouter();
 
   const handleFav= async(propertyId:number) =>
   {
@@ -64,7 +64,7 @@ export default function PropertyCard({
 
       if (res.isSuccess) {
         toast.success(res.messages[0]);
-        setLiked(true);
+        setLiked(!liked);
       } else {
         toast.error(res.errorMessages?.[0] || "Failed to add in fav list.");
         console.error(res);
@@ -78,6 +78,7 @@ export default function PropertyCard({
   }
 
   return (
+
     <motion.div
       initial={{ opacity: 0, x: 50 }}
       animate={{ opacity: 1, x: 0 }}
@@ -114,8 +115,24 @@ export default function PropertyCard({
         <div className="mt-4">
           <button
             className="cursor-pointer w-full flex items-center justify-center gap-2 bg-blue-600 text-white text-sm font-medium py-2 px-4 rounded hover:bg-blue-700 transition"
-            onClick={() => console.log("View details clicked")}
-          >
+            onClick={() => {
+              const property = {
+                id,
+                title,
+                price,
+                address,
+                bedrooms,
+                bathrooms,
+                carspots,
+                imageUrl,
+                listingType,
+                isFavourite: liked,
+                descritption
+              };
+
+              localStorage.setItem("selectedProperty", JSON.stringify(property));
+              router.push(`/detail/${id}`);
+            }}>
             <ArrowUpRight className="h-4 w-4 text-white" />
             View Details
           </button>
