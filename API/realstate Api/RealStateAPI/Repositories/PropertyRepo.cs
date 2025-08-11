@@ -43,6 +43,9 @@ namespace RealStateAPI.Repositories
                                         p.Carspots,
                                         p.ImageUrl,
                                         p.listingType,
+                                        p.UserId,
+                                        p.CreatedAt,
+                                        p.Descritption,
                                         IsFavourite = userId != null &&
                                                       _context.Favourites.Any(f => f.PropertyId == p.Id && f.UserId == userId)
                                     }).ToListAsync();
